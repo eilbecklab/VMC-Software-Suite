@@ -62,6 +62,8 @@ def run(filename, out_path):
     print(filename)
     filename = filename.encode('utf-8')
     vmc_lib.Transform([filename, len(filename)])
-    #Write out to transformed file that the user can download
+    #Write out to the cache
+    cache.set(filename, get_upload(file.filename), timeout=604800000)
+
     with open(out_path, 'w') as out:
         out.write(parse_info(filename))

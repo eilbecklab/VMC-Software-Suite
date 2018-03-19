@@ -202,7 +202,7 @@
               </table>
               <!--Download "button" (actually an image with a link)-->
               <p class="pointer text-muted">
-                  <a href="{{ vmc_vcf_path }}"><img style="width:28px;height:28px;" src="../static/images/download.png"/></a> Download transformed VCF
+                  <a href="/vmc_vcf_download"><img style="width:28px;height:28px;" src="../static/images/download.png"/></a> Download transformed VCF
               </p>
 
 
@@ -252,14 +252,14 @@
             <table class="codehilitetable">
               <tr>
                 <td class="code">
-                  <div class="codehilite"><pre>{{ json_bundle }}<pre></div>
+                  <div class="codehilite"><pre>{{ vcf_json }}<pre></div>
                 </td>
               </tr>
             </table>
             <form>
             <!--Download JSON "button" (actually an image with a link)-->
             <p class="pointer text-muted">
-                <a href="{{ json_path }}"><img style="width:28px;height:28px;" src="../static/images/download.png"/></a> Download VMC JSON
+                <a href="/vcf_json_download"><img style="width:28px;height:28px;" src="../static/images/download.png"/></a> Download VMC JSON
             </p>
             </form></br></br></br></br>
 

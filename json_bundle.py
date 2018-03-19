@@ -3,18 +3,21 @@ from datetime import datetime
 from collections import OrderedDict
 from ctypes import cdll
 
-def generate_identifiers(filename):
+def get_identifiers(vmc_vcf):
     vmc_lib = cdll.LoadLibrary('./govcf-vmc.so')
     print('Generating the VMC unique IDs')
     vmc_lib.Transform(filename)
 
-def assemble_json(bundle):
+
+    return assemble_json(identifiers)
+
+def assemble_json(identifiers):
     d = OrderedDict()
     d["$schema"] = "http://json-schema.org/schema#"
     locations = OrderedDict()
     alleles = OrderedDict()
     identifiers = OrderedDict()
-    for line in bundle:
+    for line in identifiers:
         b = line.split("\t")
         #Extract elements for JSON
         loc_id = b[0]
@@ -50,14 +53,18 @@ def assemble_json(bundle):
     d["meta"] = {"generated_at":str(datetime.now()),"vmc_version":"0.1"}
     return d
 
-def run(filename, out):
+def run(filename, vmc_vcf_path, json_path):
     """
         Checks for go.bundle which is an intermediary file used to generate identifiers to be used in the JSON representation. If it doesn't exist, then it calls govcf-vmc to
         generate it then assembles the JSON using ordered dictionaries.
     """
-    if "go.bundle" not in os.listdir():
-        generate_identifiers(filename)
-    with open("go.bundle","r") as bundle:
-        d = assemble_json(bundle)
-        with open(out,"w") as f_out:
-            f_out.write(json.dumps(d, ensure_ascii=False, indent=4))
+    if not cache.has("vmc." + filename)
+
+        #Use subprocess command to call his command line tool for the transformed VCF
+        vmc_vcf = vcf_transform.run(filename, vmc_vcf_path)
+
+
+    else:
+        vmc_vcf = cache.get("vmc." + filename)
+    d = get_identifiers(vmc_vcf)
+    return json.dumps(d, ensure_ascii=False, indent=4)
