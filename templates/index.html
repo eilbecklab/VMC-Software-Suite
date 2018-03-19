@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js" manifest="vmcsuite.appcache">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="lang:clipboard.copy" content="Copy to clipboard">
+  <meta name="lang:clipboard.copied" content="Copied to clipboard">
+  <meta name="lang:search.language" content="en">
+  <meta name="lang:search.result.none" content="No matching documents">
+  <meta name="lang:search.result.one" content="1 matching document">
+  <meta name="lang:search.result.other" content="# matching documents">
+  <meta name="lang:search.tokenizer" content="[\s\-]+">
+  <meta name="generator" content="mkdocs-0.17.2, mkdocs-material-2.0.4">
+  <!--CSS-->
+  <link rel="shortcut icon" href="../static/images/u_health.png">
+  <link rel="stylesheet" href="../static/css/hooks.css">
+  <link rel="stylesheet" href="../static/css/home.css">
+  <link href="../static/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <!--JS-->
+  <script src="../static/js/hooks.js"></script>
+  <script src="../static/js/hooks2.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.2/modernizr.js"></script>
+  <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+
+  <title>VMC Test Suite</title>
+
+  </head>
+
+  <body>
+
+    <svg class="md-svg">
+      <defs>
+        <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+      </defs>
+    </svg>
+
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="drawer">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="search">
+    <label class="md-overlay" data-md-component="overlay" for="drawer"></label>
+
+    <header class="md-header" data-md-component="header">
+      <nav class="md-header-nav md-grid">
+        <div class="md-flex">
+          <div class="md-flex__cell md-flex__cell--shrink">
+            <a style="padding:0px;" href=".." title="Test Suite" class="md-header-nav__button md-logo">
+              <img src="../static/images/vmc_header_trimmed.png" width="100" height="43">
+            </a>
+          </div>
+          <div class="md-flex__cell md-flex__cell--shrink">
+            <label class="md-icon md-icon--menu md-header-nav__button" for="drawer"></label>
+          </div>
+          <div class="md-flex__cell md-flex__cell--stretch">
+            <span class="md-flex__ellipsis md-header-nav__title">
+              Test Suite
+            </span>
+          </div>
+          <div class="md-flex__cell md-flex__cell--shrink">
+            <label class="md-icon md-icon--search md-header-nav__button" for="search"></label>
+          </div>
+          <div class="md-flex__cell md-flex__cell--shrink">
+            <div class="md-header-nav__source">
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <div class="md-container">
+      <main class="md-main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          <!--Left Menu Options-->
+          <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+            <div class="md-sidebar__scrollwrap">
+              <div class="md-sidebar__inner">
+                <nav class="md-nav md-nav--primary" data-md-level="0">
+                  <label class="md-nav__title md-nav__title--site" for="drawer">
+                    <span class="md-nav__button md-logo">
+                      <img src="../images/logo-square.png" width="24" height="24">
+                    </span>
+                    The VMC
+                  </label>
+                  <ul class="md-nav__list" data-md-scrollfix>
+                    <li class="md-nav__item">
+                      <a href="http://bit.ly/vmc-github" title="Overview" class="md-nav__link">
+                        GitHub Repo
+                      </a>
+                    </li>
+                    <li class="md-nav__item md-nav__item--nested">
+                      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2">
+                      <label style="color:#2173ff;"class="md-nav__link" for="nav-2">
+                        Specification
+                      </label>
+                      <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+                        <label class="md-nav__title" for="nav-2">
+                          Specification
+                        </label>
+                        <ul class="md-nav__list" data-md-scrollfix>
+                          <li class="md-nav__item">
+                            <a href="http://bit.ly/vmc-0-1" title="1.0" class="md-nav__link">
+                              0.1
+                            </a>
+                          </li>
+                        </ul>
+                      </nav>
+                    </li>
+                    <li class="md-nav__item">
+                      <a href="http://bit.ly/vmc-discuss" title="Hooks" class="md-nav__link">
+                        Feedback
+                      </a>
+                    </li>
+                  </ul>
+                </nav>
+              </div>
+            </div>
+          </div>
+          <!--Right Menu Options-->
+          <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+            <div class="md-sidebar__scrollwrap">
+              <div class="md-sidebar__inner">
+                <nav class="md-nav md-nav--secondary">
+                  <label class="md-nav__title" for="toc">Table of contents</label>
+                  <ul class="md-nav__list" data-md-scrollfix>
+                    <li class="md-nav__item">
+                      <a href="#identifiers" title="Identifiers" class="md-nav__link">
+                        Add VMC identifiers to VCF
+                      </a>
+                    </li>
+                    <!--li class="md-nav__item">
+                      <a href="#annotations" title="Annotations" class="md-nav__link">
+                        Add associated annotations
+                      </a>
+                  </li-->
+                    <li class="md-nav__item">
+                      <a href="#json" title="Json" class="md-nav__link">
+                        From VCF to VMC json
+                      </a>
+                    </li>
+                    <li class="md-nav__item">
+                      <a href="#hgvs" title="hgvs" class="md-nav__link">
+                        From a HGVS string to VMC json
+                      </a>
+                    </li>
+                    <li class="md-nav__item">
+                      <a href="#validator" title="validator" class="md-nav__link">
+                        Validate your VMC Identifier
+                      </a>
+                    </li>
+                  </ul>
+                </nav>
+              </div>
+            </div>
+          </div>
+          <!--Middle Content-->
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+
+
+              <h1 style="margin:8px;"id="examples">Starting with a VCF<a class="headerlink" href="#examples" title="Permanent link"></a></h1>
+              Starting file should <i>not</i> contain multiallelic variants. The <a href="https://genome.sph.umich.edu/wiki/Vt#Decompose_biallelic_block_substitutions">VT tool</a> should be pre-run to decompose variants before file transformation.</p>
+              <!--File upload-->
+              <small id="fileHelp" class="form-text text-muted">Upload your VCF file and preview</small>
+              <div "font-size:80%;" class="form-group">
+                <form action="" method=post enctype=multipart/form-data>
+                  <input class="btn-sm" type="file" onchange="this.form.submit()" id="fileInput" accept=".vcf" name="file" size="1" >
+              </form>
+                  <p id="file_name" class="text-muted"></p>
+              </div>
+              <!--Display area for uploaded VCF file-->
+              <table class="codehilitetable">
+                <tr>
+                  <td class="code">
+                    <div class="codehilite"><pre id="inDisplayArea">{{ vcf_upload }}<pre></div>
+                  </td>
+                </tr>
+              </table>
+
+
+              <h2 id="identifiers">Add VMC Unique Identifiers</h2>
+              <blockquote>
+                <p>The following VMC-standard identifiers will be added to the info field of each variant in the file. </br>INFO entries for each will also be added to the meta-information section of the file.</br>
+                  <p>
+                    <code>VMCGSID</code><small>   ##INFO=&ltID=VMCGSID,Number=1,Type=String,Description="VMC Sequence identifier"&gt</small></br>
+                    <code>VMCGLID</code><small>   ##INFO=&ltID=VMCGLID,Number=1,Type=String,Description="VMC Location identifier"&gt</small></br>
+                    <code>VMCGAID</code><small>   ##INFO=&ltID=VMCGAID,Number=1,Type=String,Description="VMC Allele identifier"&gt</small></br>
+                  </p>
+                 All identifiers are generated using the VMC digest algorithm (<i>see specification</i>).</p>
+              </blockquote>
+              <!--Transform "button" (actually an image with a link)-->
+              <p class="pointer text-muted">
+                  <a href="/vmc_vcf"><img style="width:28px;height:28px;" src="../static/images/convert.png"/></a> Add identifiers
+              </p>
+              <!--Display area for transformed VCF file-->
+              <table class="codehilitetable">
+                <tr>
+                  <td class="code">
+                    <div class="codehilite"><pre>{{ vmc_vcf }}<pre></div>
+                  </td>
+                </tr>
+              </table>
+              <!--Download "button" (actually an image with a link)-->
+              <p class="pointer text-muted">
+                  <a href="{{ vmc_vcf_path }}"><img style="width:28px;height:28px;" src="../static/images/download.png"/></a> Download transformed VCF
+              </p>
+
+
+              <!--Code for adding additional annotations to the file, potential future use-->
+              <!--h2 id="annotations">Add annotations associated with each identifier</h2>
+              <blockquote>
+                <p>The following annotations will be added blah blah blah. </br>INFO entries for each will also be added to the meta-information section of the file.</br>
+            </blockquote>
+
+
+              <p class="pointer text-muted">
+                  <a href="/transformed_vcf"><img style="width:28px;height:28px;" src="../static/images/convert.png"/></a>
+                Add annotations</input>
+              </p>
+
+              <table class="codehilitetable">
+                <tr>
+                  <td class="code">
+                    <div class="codehilite"><pre>{{ annotationsf }}<pre></div>
+                  </td>
+                </tr>
+              </table>
+              <a href={{ file_path }}><img style="width:28px;height:28px;" src="../static/images/download.png"/></a>
+              <span class="text-muted"> Download enhanced VCF </span>
+          </form-->
+
+
+            <h2 id="json">Generate a JSON VMC bundle representation of your file.</h2>
+            <blockquote>
+                <p>
+                    Below is the JSON schema used to represent the VMC bundle object, taken from <a href="https://github.com/ga4gh/vmc/blob/master/schema/vmcbundle.json"></a>
+                </p>
+            </blockquote>
+            <!--Display area for the example JSON schema-->
+            <table class="codehilitetable">
+              <tr>
+                <td class="code">
+                  <div class="codehilite"><pre>{{ json_schema }}<pre></div>
+                </td>
+              </tr>
+            </table>
+            <!--Generate JSON "button" (actually an image with a link)-->
+            <p class="pointer text-muted">
+                <a href="/json_bundle"><img style="width:28px;height:28px;" src="../static/images/convert.png"/></a> Generate JSON
+            </p>
+            <!--Display area for the VMC JSON bundle representation of the uploaded VCF file-->
+            <table class="codehilitetable">
+              <tr>
+                <td class="code">
+                  <div class="codehilite"><pre>{{ json_bundle }}<pre></div>
+                </td>
+              </tr>
+            </table>
+            <form>
+            <!--Download JSON "button" (actually an image with a link)-->
+            <p class="pointer text-muted">
+                <a href="{{ json_path }}"><img style="width:28px;height:28px;" src="../static/images/download.png"/></a> Download VMC JSON
+            </p>
+            </form></br></br></br></br>
+
+
+            <h1 style="margin:8px;"id="examples">Starting without a VCF<a class="headerlink" href="#examples" title="Permanent link"></a></h1>
+            <h2 id="hgvs">Generate a VMC bundle from a HGVS string.</h2>
+            <blockquote>
+              <p>
+                  Result is a JSON representation of the VMC bundle described in the specification (<i>see above for example</i>). Code used in conversion is taken from the VMC GitHub repo file <code>vmc-python/vmc/conversions.py</code> found <a href="https://github.com/ga4gh/vmc-python/blob/master/vmc/conversions.py">here</a>.
+              </p>
+            </blockquote>
+            <!--Text input area for entering a HGVS string-->
+            <form method="POST" action="/hgvs">
+                HGVS string: <input class="input_box" type="text" name="hgvs_string"><br>
+                <input class="btn" type="submit" value="Enter">
+            </form>
+            <!--Display area for the VMC JSON bundle representation of the entered HGVS string-->
+            <table class="codehilitetable">
+              <tr>
+                <td class="code">
+                  <div class="codehilite"><pre>{{ hgvs_json }}<pre></div>
+                </td>
+              </tr>
+            </table>
+
+
+            <h2 id="validator">Validate your VMC Identifier</h2>
+            <blockquote>
+              <p>
+                  A thorough explanation of what they will need to provide in order for this to work and a disclaimer that we already convert things for you but that we would be happy to check if your implementation is generating correct identifiers.
+              </p>
+            </blockquote>
+            <!--Text input area for entering a VMC identifier to validate-->
+            <form action="/">
+                Identifier: <input class="input_box" type="text" name="hgvs_string"><br>
+                <input class="btn" type="submit" value="Enter">
+                <input type="radio" value="Allele"/>
+                <input type="dropdown" value="HG19" />
+            </form></br></br></br></br>
+
+
+            </article>
+          </div>
+        </div>
+      </main>
+
+      <footer class="md-footer">
+        <div class="md-footer-meta md-typeset">
+          <div class="md-footer-meta__inner md-grid">
+            <div class="md-footer-copyright">
+              powered by <a href="http://www.mkdocs.org" title="MkDocs">MkDocs</a> and <a href="http://squidfunk.github.io/mkdocs-material/" title="Material for MkDocs"> Material for MkDocs</a>
+            </div>
+          </div>
+        </div>
+      </footer>
+
+    </div>
+
+    <script>app.initialize({version:"0.17.2",url:{base:".."}})</script>
+  </body>
+</html>
