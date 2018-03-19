@@ -1,5 +1,5 @@
 from flask import Flask, flash, render_template, \
-    request, redirect, send_from_directory
+    request, redirect, send_from_directory, make_response
 import vcf_transform, json_bundle, hgvs_conversion, re, os
 
 # create the application object
@@ -29,13 +29,11 @@ def get_json_bundle(filename):
 
 def get_filename():
     """Returns the name of the uploaded VCF file"""
-    r = re.compile('.+.vcf')
-    return list(filter(r.match, os.listdir("static/uploads")))[0]
+    return request.cookies.get("filename")
 
 def get_download_paths():
     """Creates paths to transformed VCF and JSON files ready for download"""
-    r = re.compile('.+.vcf')
-    filename = list(filter(r.match, os.listdir("static/uploads")))[0]
+    filename = get_filename()
     json = "static/downloads/" + filename.split(".")[0] + ".json"
     vcf = "static/downloads/vmc_" + filename
     return json,vcf
@@ -56,7 +54,10 @@ def home():
         file.save(os.path.join(APP.config['UPLOAD_FOLDER'], file.filename))
         vcf_upload = get_upload(file.filename)
         #Displays uploaded VCF with example JSON
-        return render_template('index.html',vcf_upload=vcf_upload,json_schema=json_schema)
+
+        r = make_response(render_template('index.html',vcf_upload=vcf_upload,json_schema=json_schema))
+        r.set_cookie("filename", file.filename)
+        return r
     #Displays example JSON
     return render_template('index.html',json_schema=json_schema)
 
@@ -72,12 +73,16 @@ def display_vmc_vcf():
     json_path,vmc_vcf_path = get_download_paths()
     vcf_upload = get_upload(filename)
     #Check if transformed VCF exists in downloads folder
-    r = re.compile('.+.vcf')
-    if filter(r.match, os.listdir("static/downloads")):
+    if not os.path.isfile("static/downloads/vmc_" + filename):
+
+
+        #Use subprocess command to call his command line tool for the transformed VCF 
+
         vcf_transform.run(filename, vmc_vcf_path)
-        vmc_vcf = get_vmc_vcf(vmc_vcf_path)
-    else:
-        vmc_vcf = get_vmc_vcf(vmc_vcf_path)
+
+
+
+    vmc_vcf = get_vmc_vcf(vmc_vcf_path)
     return render_template('index.html', json_schema=json_schema, vcf_upload=vcf_upload, vmc_vcf=vmc_vcf, vmc_vcf_path=vmc_vcf_path)
 
 
@@ -93,8 +98,7 @@ def display_json_bundle():
     json_path,vmc_vcf_path = get_download_paths()
     vcf_upload = get_upload(filename)
     #Check if transformed JSON exists in downloads folder
-    r = re.compile('.+.json')
-    if filter(r.match, os.listdir("static/downloads")):
+    if os.path.isfile("static/downloads/" + filename[0:-4] + '.json'):
         json_bundle = get_json_bundle(json_path)
     else:
         json_bundle.run(filename, json_path)

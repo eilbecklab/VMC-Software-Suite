@@ -15,7 +15,7 @@ import (
 //export Transform
 func Transform(filename string) {
 
-	fh, err := xopen.Ropen("static/uploads/HG00177_sml.vcf")
+	fh, err := xopen.Ropen("static/uploads/" + filename)
 	eCheck(err)
 	defer fh.Close()
 
@@ -52,7 +52,7 @@ func Transform(filename string) {
 		out += ";VMCGSID=" + record.Location.Id + ";VMCGLID=" + record.Location.Interval + ";VMCGAID=" + record.Location.Sequence_id + "\n"
         bundle += record.Location.Id + "\t" + record.Location.Interval + "\t" + record.Location.Sequence_id + "\t" + record.Allele.Id + "\t" + record.Allele.State + "\t" +  "TEST_NM_000551.2" + "\t" + "NCBI" + "\n"
     }
-	vcf_file, vcf_err := os.Create("go.vcf")
+	vcf_file, vcf_err := os.Create("go_" + filename)
     if vcf_err != nil {
         log.Fatal("Cannot create file", vcf_err)
     }

@@ -36,8 +36,16 @@ def parse_info(filename):
             else:
                 line_list = line.split('\t')
                 print(line_list)
+                print(line_list[9])
+
                 var = line_list[0] + '\t' + line_list[1] + '\t' + line_list[2] + '\t' + line_list[3] + '\t' + line_list[4] + '\t' + \
-                line_list[5] + '\t' + line_list[6] + '\t' + line_list[7] + id_list[idx] + '\t' + line_list[8] + '\t' + line_list[9]
+                line_list[5] + '\t' \
+                + line_list[6] + '\t' \
+                + line_list[7] \
+                #+ id_list[idx] + '\t' \
+                #+ line_list[8] + '\t' \
+                #+ line_list[9]
+
 
                 variants += var
                 idx += 1
@@ -51,7 +59,9 @@ def run(filename, out_path):
     """
     vmc_lib = cdll.LoadLibrary('./govcf-vmc.so')
     print('Generating the VMC unique IDs')
-    vmc_lib.Transform(filename)
+    print(filename)
+    filename = filename.encode('utf-8')
+    vmc_lib.Transform([filename, len(filename)])
     #Write out to transformed file that the user can download
     with open(out_path, 'w') as out:
         out.write(parse_info(filename))
