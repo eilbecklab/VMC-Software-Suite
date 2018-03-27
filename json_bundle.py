@@ -58,7 +58,7 @@ def run(filename, vmc_vcf_path, json_path):
         Checks for go.bundle which is an intermediary file used to generate identifiers to be used in the JSON representation. If it doesn't exist, then it calls govcf-vmc to
         generate it then assembles the JSON using ordered dictionaries.
     """
-    if not cache.has("vmc." + filename)
+    if not cache.has("vmc." + filename):
 
         #Use subprocess command to call his command line tool for the transformed VCF
         vmc_vcf = vcf_transform.run(filename, vmc_vcf_path)

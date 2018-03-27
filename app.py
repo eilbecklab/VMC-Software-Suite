@@ -54,7 +54,7 @@ def display_vmc_vcf():
             return render_template('index.html', json_schema=json_schema, vcf_upload="No file uploaded", vmc_vcf="No file uploaded")
     vcf_upload = cache.get(filename)
     #Check if transformed VCF exists in the cache
-    if not cache.has("vmc." + filename)
+    if not cache.has("vmc." + filename):
 
         #Use subprocess command to call his command line tool for the transformed VCF
         vmc_vcf = vcf_transform.run(filename)
@@ -85,7 +85,7 @@ def display_json_bundle():
             return render_template('index.html', json_schema=json_schema, vcf_upload="No file uploaded", vcf_json="No file uploaded")
     vcf_upload = cache.get(filename)
     #Check if transformed JSON exists in the cache
-    if not cache.has(filename[0:-4] + '.json')
+    if not cache.has(filename[0:-4] + '.json'):
         vcf_json = json_bundle.run(filename)
         cache.set(filename[0:-4] + '.json', vcf_json, timeout=604800000)
     else:
