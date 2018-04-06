@@ -49,12 +49,11 @@ def _get_hgvs_parser():
     return hp
 
 
-def from_hgvs(hgvs_string):
+def from_hgvs(hgvs_string, sequence_id):
     hp = _get_hgvs_parser()
     sv = hp.parse_hgvs_variant(hgvs_string)
 
     ir = models.Identifier(namespace="NCBI", accession=sv.ac)
-    sequence_id = "VMC:GS_Ya6Rs7DHhDeg7YaOSg1EoNi3U_nQ9SvO"#get_vmc_sequence_id(ir)
 
     if isinstance(sv.posedit.pos, hgvs.location.BaseOffsetInterval):
         if sv.posedit.pos.start.is_intronic or sv.posedit.pos.end.is_intronic:

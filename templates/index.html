@@ -186,12 +186,18 @@
                     <code>VMCGLID</code><small>   ##INFO=&ltID=VMCGLID,Number=1,Type=String,Description="VMC Location identifier"&gt</small></br>
                     <code>VMCGAID</code><small>   ##INFO=&ltID=VMCGAID,Number=1,Type=String,Description="VMC Allele identifier"&gt</small></br>
                   </p>
-                 All identifiers are generated using the VMC digest algorithm (<i>see specification</i>).</p>
+                 All identifiers are generated using the VMC digest algorithm (<i>see specification</i>). Select the reference build and push button to add the identifiers.</p>
               </blockquote>
+              <form action="/vmc_vcf" method="POST">
+              <select name="reference" style="width:100px;font-size:80%;">
+                  <option selected="selected" value="GRCh37">GRCh37</option>
+                  <option value="GRCh38">GRCh38</option>
+              </select>
               <!--Transform "button" (actually an image with a link)-->
               <p class="pointer text-muted">
-                  <a href="/vmc_vcf"><img style="width:28px;height:28px;" src="../static/images/convert.png"/></a> Add identifiers
+                  <button type="submit"><img style="width:28px;height:28px;" src="../static/images/convert.png"/></button> Add identifiers
               </p>
+              </form>
               <!--Display area for transformed VCF file-->
               <table class="codehilitetable">
                 <tr>
@@ -244,10 +250,17 @@
                 </td>
               </tr>
             </table>
-            <!--Generate JSON "button" (actually an image with a link)-->
+            <form action="/json_bundle" method="POST">
+            <select name="reference" style="width:100px;font-size:80%;">
+                <option selected="selected" value="GRCh37">GRCh37</option>
+                <option value="GRCh38">GRCh38</option>
+            </select>
+            <!--Transform "button" (actually an image with a link)-->
             <p class="pointer text-muted">
-                <a href="/json_bundle"><img style="width:28px;height:28px;" src="../static/images/convert.png"/></a> Generate JSON
+                <button type="submit"><img style="width:28px;height:28px;" src="../static/images/convert.png"/></button> Generate JSON
             </p>
+            </form>
+
             <!--Display area for the VMC JSON bundle representation of the uploaded VCF file-->
             <table class="codehilitetable">
               <tr>
@@ -269,6 +282,7 @@
             <blockquote>
               <p>
                   Result is a JSON representation of the VMC bundle described in the specification (<i>see above for example</i>). Code used in conversion is taken from the VMC GitHub repo file <code>vmc-python/vmc/conversions.py</code> found <a href="https://github.com/ga4gh/vmc-python/blob/master/vmc/conversions.py">here</a>.
+              </br></br>**Using a single sequence ID for each entry until a base of accessions are mapped to sequence identifiers**
               </p>
             </blockquote>
             <!--Text input area for entering a HGVS string-->
