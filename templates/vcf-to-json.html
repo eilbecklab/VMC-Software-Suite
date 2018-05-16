@@ -1,0 +1,42 @@
+{% extends 'skin.html' %}
+{% block middle_content %}
+  <h2>Generate a JSON VMC bundle representation of your file</h2>
+  {% include 'vcf-upload.html' %}
+  <blockquote>
+    <p>
+      Below is the JSON schema used to represent the VMC bundle object, taken from <a href="https://github.com/ga4gh/vmc/blob/master/schema/vmcbundle.json"></a>
+    </p>
+  </blockquote>
+  <!--Display area for the example JSON schema-->
+  <table class="codehilitetable">
+    <tr>
+      <td class="code">
+        <div class="codehilite"><pre>{{ json_schema }}</pre></div>
+      </td>
+    </tr>
+  </table>
+  <form action="" method="post">
+    <select name="reference" style="width:100px;font-size:80%;">
+      <option selected="selected" value="GRCh37">GRCh37</option>
+      <option value="GRCh38">GRCh38</option>
+    </select>
+    <!--Transform "button" (actually an image with a link)-->
+    <p class="pointer text-muted">
+      <button type="submit"><img style="width:28px;height:28px;" src="../static/images/convert.png"/></button> Generate JSON
+    </p>
+  </form>
+  <!--Display area for the VMC JSON bundle representation of the uploaded VCF file-->
+  <table class="codehilitetable">
+    <tr>
+      <td class="code">
+        <div class="codehilite"><pre>{{ vcf_json }}</pre></div>
+      </td>
+    </tr>
+  </table>
+  <form>
+    <!--Download JSON "button" (actually an image with a link)-->
+    <p class="pointer text-muted">
+      <a href="/vcf-to-json-download"><img style="width:28px;height:28px;" src="../static/images/download.png"/></a> Download VMC JSON
+    </p>
+  </form>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'skin.html' %}
+{% block middle_content %}
+  <h2>Generate a VMC bundle from a HGVS string</h2>
+  <blockquote>
+    <p>
+      Result is a JSON representation of the VMC bundle described in the specification (<i>see above for example</i>). Code used in conversion is taken from the VMC GitHub repo file <code>vmc-python/vmc/conversions.py</code> found <a href="https://github.com/ga4gh/vmc-python/blob/master/vmc/conversions.py">here</a>.
+      <br/><br/>
+      **Using a single sequence ID for each entry until a base of accessions are mapped to sequence identifiers**
+    </p>
+  </blockquote>
+  <!--Text input area for entering a HGVS string-->
+  <form action="" method="post">
+    HGVS string: <input class="input_box" type="text" name="hgvs_string" value="{{ hgvs_string }}"><br/>
+    <input class="btn" type="submit" value="Enter">
+  </form>
+  <!--Display area for the VMC JSON bundle representation of the entered HGVS string-->
+  <table class="codehilitetable">
+    <tr>
+      <td class="code">
+        <div class="codehilite"><pre>{{ hgvs_json }}</pre></div>
+      </td>
+    </tr>
+  </table>
+{% endblock %}

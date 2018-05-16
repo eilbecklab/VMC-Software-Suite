@@ -1,0 +1,16 @@
+{% extends 'skin.html' %}
+{% block middle_content %}
+  <h2 id="validator">Validate your VMC Identifier</h2>
+  <blockquote>
+    <p>
+      A thorough explanation of what they will need to provide in order for this to work and a disclaimer that we already convert things for you but that we would be happy to check if your implementation is generating correct identifiers.
+    </p>
+  </blockquote>
+  <!--Text input area for entering a VMC identifier to validate-->
+  <form action="" method="post">
+    Identifier: <input class="input_box" type="text" name="hgvs_string"><br/>
+    <input class="btn" type="submit" value="Enter">
+    <input type="radio" value="Allele"/>
+    <input type="dropdown" value="HG19" />
+  </form>
+{% endblock %}

@@ -1,4 +1,4 @@
-from flask import Flask, flash, render_template, \
+from flask import abort, Flask, flash, render_template, \
     request, redirect, send_from_directory, make_response
 import os, generate_identifiers, hgvs_conversion, json_conversion, sqlite3
 from werkzeug.contrib.cache import FileSystemCache
@@ -82,132 +82,143 @@ def add_identifiers(identifiers, vcf_upload):
     return final
 
 
-@APP.route('/', methods=['GET', 'POST'])
-def home():
-    """
-        Displays the example JSON schema, saves the uploaded VCF file to the cache and displays it as well.
-
-    """
-    json_schema = get_json_schema()
-    if request.method == 'POST':
-        #check if the post request has the file part
-        if 'file' not in request.files:
-            return redirect(request.url)
-        file = request.files['file']
-        vcf_upload = file.read().decode()
-        fileKey = sha256(file.read()).hexdigest()
-        #Displays uploaded VCF with example JSON
-        r = make_response(render_template('index.html',vcf_upload=vcf_upload,json_schema=json_schema))
-        #Set cookies to track the filename and the file key (hash of the file contents)
-        r.set_cookie("fileKey", fileKey)
-        r.set_cookie("filename", file.filename)
-        #Store the uploaded VCF in the cache with the file key
-        cache.set(fileKey, vcf_upload, timeout=604800000)
+@APP.route('/upload-vcf', methods=['POST'])
+def upload_vcf():
+    r = make_response(redirect(request.referrer))
+    #check if the post request has the file part
+    if 'file' not in request.files:
         return r
-    #Displays example JSON
-    return render_template('index.html',json_schema=json_schema)
+    file = request.files['file']
+    vcf_upload = file.read().decode()
+    fileKey = sha256(file.read()).hexdigest()
+    #Displays uploaded VCF with example JSON
+    #Set cookies to track the filename and the file key (hash of the file contents)
+    r.set_cookie("fileKey", fileKey)
+    r.set_cookie("filename", file.filename)
+    #Store the uploaded VCF in the cache with the file key
+    cache.set(fileKey, vcf_upload, timeout=604800000)
+    return r
 
+@APP.route('/')
+def index():
+    return render_template('index.html')
 
-@APP.route('/vmc_vcf', methods=['GET', 'POST'])
-def display_vmc_vcf():
-    """
-        Checks to see if the transformed VCF already exists in the downloads folder, generates it if not from transform.py, then displays it along with the
-        example JSON schema and the original uploaded file. Also sends the filepath for downloading the transformed VCF file.
-    """
-    json_schema = get_json_schema()
+@APP.route('/vcf-to-vmc-vcf', methods=['GET', 'POST'])
+def vcf_to_vmc_vcf():
     fileKey = get_fileKey()
     #Check for the uploaded VCF in the cache
-    if not cache.has(fileKey):
-            return render_template('index.html', json_schema=json_schema, vcf_upload="No file uploaded", vmc_vcf="No file uploaded")
+    if not fileKey or not cache.has(fileKey):
+        return render_template('vcf-to-vmc-vcf.html', vcf_upload='No file uploaded')
     vcf_upload = cache.get(fileKey)
-    #Check if transformed VCF exists in the cache
-    if not cache.has("vmc." + fileKey):
-        #Get the sequence identifiers
-        seqs = get_seqs(request.form['reference'])
-        #Get chromosome #'s, intervals, and states for each variant
-        chrs,intervals,states = get_chrs_intervals_and_states(vcf_upload)
-        #Get the identifiers for the entire VCF
-        identifiers = generate_identifiers.vcf_to_vmc(seqs,chrs,intervals,states)
-        vmc_vcf = add_identifiers(identifiers,vcf_upload)
-        cache.set("vmc." + fileKey, vmc_vcf, timeout=604800000)
-    else:
-        vmc_vcf = cache.get("vmc." + fileKey)
 
-    return render_template('index.html', json_schema=json_schema, vcf_upload=vcf_upload, vmc_vcf=vmc_vcf)
+    if request.method == 'POST':
+        """
+            Checks to see if the transformed VCF already exists in the downloads folder, generates it if not from transform.py, then displays it along with the
+            example JSON schema and the original uploaded file. Also sends the filepath for downloading the transformed VCF file.
+        """
+        #Check if transformed VCF exists in the cache
+        if not cache.has("vmc." + fileKey):
+            #Get the sequence identifiers
+            seqs = get_seqs(request.form['reference'])
+            #Get chromosome #'s, intervals, and states for each variant
+            chrs,intervals,states = get_chrs_intervals_and_states(vcf_upload)
+            #Get the identifiers for the entire VCF
+            identifiers = generate_identifiers.vcf_to_vmc(seqs,chrs,intervals,states)
+            vmc_vcf = add_identifiers(identifiers,vcf_upload)
+            cache.set("vmc." + fileKey, vmc_vcf, timeout=604800000)
+        else:
+            vmc_vcf = cache.get("vmc." + fileKey)
 
-@APP.route('/vmc_vcf_download')
-def serve_vmc_vcf():
+        return render_template('vcf-to-vmc-vcf.html', vcf_upload=vcf_upload, vmc_vcf=vmc_vcf)
+
+    return render_template('vcf-to-vmc-vcf.html', vcf_upload=vcf_upload)
+
+@APP.route('/vcf-to-vmc-vcf-download')
+def vcf_to_vmc_vcf_download():
     filename = "vmc." + get_filename()
     fileKey = "vmc." + get_fileKey()
-    if cache.has(fileKey):
-        response = make_response(cache.get(fileKey))
-        response.headers.set("Content-Disposition", "attachment; filename=" + filename )
-        return response
+    if not cache.has(fileKey):
+        abort(400)
 
-@APP.route('/json_bundle', methods=['GET', 'POST'])
-def display_json_bundle():
-    """
-        Checks to see if the transformed JSON already exists in the downloads folder, generates it if not from bundle.py, then displays it along with the
-        example JSON schema and the original uploaded file. Also sends the filepath for downloading the transformed JSON file.
+    response = make_response(cache.get(fileKey))
+    response.headers.set("Content-Disposition", "attachment; filename=" + filename )
+    return response
 
-    """
+@APP.route('/vcf-to-json', methods=['GET', 'POST'])
+def vcf_to_json():
     json_schema = get_json_schema()
     fileKey = get_fileKey()
-    if not cache.has(fileKey):
-            return render_template('index.html', json_schema=json_schema, vcf_upload="No file uploaded", vcf_json="No file uploaded")
+    if not fileKey or not cache.has(fileKey):
+        return render_template('vcf-to-json.html', json_schema=json_schema, vcf_upload='No file uploaded')
     vcf_upload = cache.get(fileKey)
-    #Check if transformed JSON exists in the cache
-    cache.delete(fileKey + '.json')
-    if not cache.has(fileKey + '.json'):
-        #Get the sequence identifiers
-        seqs = get_seqs(request.form['reference'])
-        #Get the accession numbers
-        accs = get_accs(request.form['reference'])
-        #Get chromosome #'s, intervals, and states for each variant
-        chrs,intervals,states = get_chrs_intervals_and_states(vcf_upload)
-        #Get the identifiers for the entire VCF
-        identifiers = generate_identifiers.json_to_vmc(seqs,accs,chrs,intervals,states)
-        vcf_json = json_conversion.run(identifiers)
-        cache.set(fileKey + '.json', vcf_json, timeout=604800000)
-    else:
-        vcf_json = cache.get(fileKey + '.json')
-    return render_template('index.html', json_schema=json_schema, vcf_upload=vcf_upload, vcf_json=vcf_json)
 
-@APP.route('/vcf_json_download')
-def serve_vcf_json():
+    if request.method == 'POST':
+        """
+            Checks to see if the transformed JSON already exists in the downloads folder, generates it if not from bundle.py, then displays it along with the
+            example JSON schema and the original uploaded file. Also sends the filepath for downloading the transformed JSON file.
+
+        """
+        #Check if transformed JSON exists in the cache
+        if not cache.has(fileKey + '.json'):
+            #Get the sequence identifiers
+            seqs = get_seqs(request.form['reference'])
+            #Get the accession numbers
+            accs = get_accs(request.form['reference'])
+            #Get chromosome #'s, intervals, and states for each variant
+            chrs,intervals,states = get_chrs_intervals_and_states(vcf_upload)
+            #Get the identifiers for the entire VCF
+            identifiers = generate_identifiers.json_to_vmc(seqs,accs,chrs,intervals,states)
+            vcf_json = json_conversion.run(identifiers)
+            cache.set(fileKey + '.json', vcf_json, timeout=604800000)
+        else:
+            vcf_json = cache.get(fileKey + '.json')
+
+        return render_template('vcf-to-json.html', json_schema=json_schema, vcf_upload=vcf_upload, vcf_json=vcf_json)
+
+    return render_template('vcf-to-json.html', json_schema=json_schema, vcf_upload=vcf_upload)
+
+@APP.route('/vcf-to-json-download', methods=['GET', 'POST'])
+def vcf_to_json_download():
     filename = get_filename()[0:-4] + ".json"
     fileKey = get_fileKey() + ".json"
+    if not cache.has(fileKey):
+        abort(400)
 
-    if cache.has(fileKey):
-        response = make_response(cache.get(fileKey))
-        response.headers.set("Content-Disposition", "attachment; filename=" + filename )
-        return response
+    response = make_response(cache.get(fileKey))
+    response.headers.set("Content-Disposition", "attachment; filename=" + filename )
+    return response
 
-@APP.route('/hgvs', methods=['GET', 'POST'])
+@APP.route('/hgvs-to-json', methods=['GET', 'POST'])
 def hgvs_to_json():
-    """
-        Uses conversions.py to convert a HGVS string to a VMC JSON bundle and displays it along with the example JSON schema.
+    if request.method == 'POST':
+        """
+            Uses conversions.py to convert a HGVS string to a VMC JSON bundle and displays it along with the example JSON schema.
 
-    """
-    json_schema = get_json_schema()
-    hgvs = request.form['hgvs_string']
-    acc = hgvs.split(":")[0]
-    sequence_id = "Sequence identifier not found"
-    found = False
-    with sqlite3.connect("sequence_identifiers.db") as db:
-        cursor = db.cursor()
-        cursor.execute("SELECT IDENTIFIER FROM Sequence_Identifiers WHERE ACCESSION=\'" + acc + "\'")
-        rows = cursor.fetchall()
-        for row in rows:
-            found = True
-            sequence_id = row[0]
-    if found:
-        hgvs_json = hgvs_conversion.from_hgvs(hgvs,sequence_id)
-        return render_template('index.html', json_schema=json_schema, hgvs_json=hgvs_json)
-    else:
-        response = "No sequence identifier found for " + acc
-        return render_template('index.html', json_schema=json_schema, hgvs_json=response)
+        """
+        json_schema = get_json_schema()
+        hgvs = request.form['hgvs_string']
+        acc = hgvs.split(":")[0]
+        sequence_id = "Sequence identifier not found"
+        found = False
+        with sqlite3.connect("sequence_identifiers.db") as db:
+            cursor = db.cursor()
+            cursor.execute("SELECT IDENTIFIER FROM Sequence_Identifiers WHERE ACCESSION=\'" + acc + "\'")
+            rows = cursor.fetchall()
+            for row in rows:
+                found = True
+                sequence_id = row[0]
+        if found:
+            hgvs_json = hgvs_conversion.from_hgvs(hgvs,sequence_id)
+            return render_template('hgvs-to-json.html', hgvs_string=hgvs, hgvs_json=hgvs_json)
+        else:
+            response = "No sequence identifier found for " + acc
+            return render_template('hgvs-to-json.html', hgvs_string=hgvs, hgvs_json=response)
 
+    return render_template('hgvs-to-json.html')
+
+@APP.route('/validator', methods=['GET', 'POST'])
+def validate_hgvs():
+    return render_template('validator.html')
 
 # start the server with the 'run()' method
 if __name__ == '__main__':

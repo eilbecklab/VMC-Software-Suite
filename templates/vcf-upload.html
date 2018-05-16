@@ -1,0 +1,16 @@
+Starting file should <i>not</i> contain multiallelic variants. The <a href="https://genome.sph.umich.edu/wiki/Vt#Decompose_biallelic_block_substitutions">VT tool</a> should be pre-run to decompose variants before file transformation.</p>
+<small id="fileHelp" class="form-text text-muted">Upload your VCF file and preview</small>
+  <div "font-size:80%;" class="form-group">
+    <form action="/upload-vcf" method="post" enctype="multipart/form-data">
+      <input class="btn-sm" type="file" onchange="this.form.submit()" id="fileInput" accept=".vcf" name="file" size="1" >
+    </form>
+    <p id="file_name" class="text-muted"></p>
+  </div>
+  <!--Display area for uploaded VCF file-->
+  <table class="codehilitetable">
+  <tr>
+    <td class="code">
+      <div class="codehilite"><pre id="inDisplayArea">{{ vcf_upload }}</pre></div>
+    </td>
+  </tr>
+</table>
