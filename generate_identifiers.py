@@ -35,11 +35,12 @@ def vcf_to_vmc(seqs, chrs, intervals, states):
             chr = int(chrs[i]) - 1
             seqs_position = chr
         #Generate the location identifier
-        GL = "VMC:GL_" + digest(GL_template(seqs[i],intervals[i]).encode("ASCII"))
+
+        GL = "VMC:GL_" + digest(GL_template(seqs[seqs_position],intervals[i]).encode("ASCII"))
         #Generate the allele identifier
         GA = "VMC:GA_" + digest(GA_template(GL,states[i]).encode("ASCII"))
         #Compile them into an appropriate string
-        results.append(";VMCGSID=" + seqs[i] + ";VMCGLID=" + GL + ";VMCGAID=" + GA)
+        results.append(";VMCGSID=" + seqs[seqs_position] + ";VMCGLID=" + GL + ";VMCGAID=" + GA)
     return results
 
 def json_to_vmc(seqs, accs, chrs, intervals, states):
@@ -55,6 +56,8 @@ def json_to_vmc(seqs, accs, chrs, intervals, states):
             chr = int(chrs[i]) - 1
             seqs_position = chr
         #Generate the location identifier
+        print(str(len(seqs)))
+        print(str(len(intervals)))
         GL = "VMC:GL_" + digest(GL_template(seqs[seqs_position],intervals[i]).encode("ASCII"))
         #Generate the allele identifier
         GA = "VMC:GA_" + digest(GA_template(GL,states[i]).encode("ASCII"))
