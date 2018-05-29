@@ -7,10 +7,80 @@
     </p>
   </blockquote>
   <!--Text input area for entering a VMC identifier to validate-->
+
   <form action="" method="post">
-    Identifier: <input class="input_box" type="text" name="hgvs_string"><br/>
-    <input class="btn" type="submit" value="Enter">
-    <input type="radio" value="Allele"/>
-    <input type="dropdown" value="HG19" />
+    Type of identifier:
+    <select name="select_type" style="width:25%;">
+        <option value="">Select Type</option>
+        <option value="seq">Sequence</option>
+        <option value="loc">Location</option>
+        <option value="allele">Allele</option>
+    </select></br></br>
+
+    <!--Results should display at the bottom of whatever ends up being selected-->
+    <span><img style="width:28px;height:28px;" src="../static/images/yes.png"/><img style="width:28px;height:28px;" src="../static/images/no.png"/>{{ valid|safe }}</span>
+</br></br>
+
+    <!-- If "Sequence" is selected-->
+    SEQUENCE DISPLAYING
+    <div id="seq">
+        Your Identifier: <input style="width:60%;" class="input_box" type="text" placeholder="ex: VMC:GS_..." name="user_seq" value="{{ user_seq }}"></br>
+
+        <select name="seq_ref" style="width:25%;">
+            <option value="">Select Reference</option>
+            <option value="grch37">GRCh37</option>
+            <option value="grch38">GRCh38</option>
+            <option value="other">Other</option>
+        </select></br>
+        <!-- If "Other" is selected-->
+          Other reference: <input class="input_box" type="text" placeholder="ex: NNNN … CTCT … NNNN [58617616 nucleotides]" name="seq_other_ref" value="{{ seq_other_ref }}">
+
+          <input class="btn" type="submit" value="Validate">
+    </div>
+    </br></br>
+
+
+    <!-- If "Location" is selected-->
+    LOCATION DISPLAYING
+    <div id="loc">
+        Identifier: <input style="width:60%;" class="input_box" type="text" placeholder="ex: VMC:GL_..." name="user_loc" value="{{ user_loc }}"></br>
+
+        <select name="loc_ref" style="width:25%;">
+            <option value="">Select Reference</option>
+            <option value="grch37">GRCh37</option>
+            <option value="grch38">GRCh38</option>
+            <option value="other">Other</option>
+        </select></br>
+        <!-- If "Other" is selected-->
+          Other reference: <input class="input_box" type="text" placeholder="ex: NNNN … CTCT … NNNN [58617616 nucleotides]" name="loc_other_ref" value="{{ loc_other_ref }}">
+
+        Start location: <input class="input_box" type="text" placeholder="Enter start location" name="loc_start_loc" value="{{ start_loc }}"></br>
+
+        <input class="btn" type="submit" value="Validate">
+    </div>
+    </br></br>
+
+
+    <!-- If "Allele" is selected-->
+    ALLELE DISPLAYING
+    <div id="allele">
+        Identifier: <input style="width:60%;" class="input_box" type="text" placeholder="ex: VMC:GA_..." name="user_allele" value="{{ user_allele }}"></br>
+
+        <select name="allele_ref" style="width:25%;">
+            <option value="">Select Reference</option>
+            <option value="grch37">GRCh37</option>
+            <option value="grch38">GRCh38</option>
+            <option value="other">Other</option>
+        </select></br>
+        <!-- If "Other" is selected-->
+          Other reference: <input class="input_box" type="text" placeholder="ex: NNNN … CTCT … NNNN [58617616 nucleotides]" name="allele_other_ref" value="{{ allele_other_ref }}">
+
+        Start location: <input class="input_box" type="text" placeholder="Enter start location" name="allele_start_loc" value="{{ start_loc }}">
+
+    </br>
+        Alternate allele: <input class="input_box" type="text" placeholder="Enter alt allele" name="state" value="{{ state }}">
+        <input class="btn" type="submit" value="Validate">
+    </div>
+
   </form>
 {% endblock %}

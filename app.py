@@ -1,6 +1,6 @@
 from flask import abort, Flask, flash, render_template, \
     request, redirect, send_from_directory, make_response
-import os, generate_identifiers, hgvs_conversion, json_conversion, sqlite3
+import os, generate_identifiers, hgvs_conversion, json_conversion, validate, sqlite3
 from werkzeug.contrib.cache import FileSystemCache
 from hashlib import sha256
 
@@ -217,8 +217,69 @@ def hgvs_to_json():
     return render_template('hgvs-to-json.html')
 
 @APP.route('/validator', methods=['GET', 'POST'])
-def validate_hgvs():
-    return render_template('validator.html')
+def validation():
+    if request.method == 'POST':
+        select_type = request.form.get('select_type')
+        #Validation for a sequence identifier
+        if select_type == "seq":
+            user_seq = request.form['user_seq']
+            seqID = get_seqID(select_type, request)
+            if user_seq == seqID:
+                return render_template('validator.html', valid="Valid identifier!")
+            else:
+                return render_template('validator.html', valid="Invalid identifier: &emsp;" + user_seq + "</br>&emsp;&emsp;&emsp;What we computed: " + seqID)
+
+        #Validation for a location identifier
+        elif select_type == "loc":
+                print("loc requested")
+                user_loc = request.form['user_loc']
+                seqID = get_seqID(select_type, request)
+                start = request.form['loc_start_loc']
+                locID = validate.build_loc(seqID, int(start))
+                if locID == user_loc:
+                    return render_template('validator.html', valid="Valid identifier!")
+                else:
+                    return render_template('validator.html', valid="Invalid identifier: " + user_loc +"</br>&emsp;&emsp;&emsp;What we computed: " + locID)
+
+            #Validation for a allele identifier
+        elif select_type == "allele":
+                print("allele requested")
+                user_allele = request.form['user_allele']
+                seqID = get_seqID(select_type, request)
+                start = request.form['allele_start_loc']
+                locID = validate.build_loc(seqID, int(start))
+                print("locID: " + locID)
+                state = request.form['state']
+                print("state: " + state)
+                alleleID = validate.build_allele(locID, state)
+                print("alleleID: " + alleleID)
+                if alleleID == user_allele:
+                    return render_template('validator.html', valid="Valid identifier!")
+                else:
+                    return render_template('validator.html', valid="Invalid identifier: " + user_allele + "</br>&emsp;&emsp;&emsp;What we computed: " + alleleID)
+        #Invalid selection
+        else:
+            return render_template('validator.html')
+
+    #Invalid selection
+    else:
+        return render_template('validator.html')
+
+def get_seqID(select_type, request):
+    select = select_type + '_ref'
+    ref = request.form.get(select)
+    if ref == "grch37":
+        #fetch grch37 seqID
+        return render_template('validator.html', valid="sequence not found")
+    if ref == "grch38":
+        #fetch grch38 seq_id
+        return render_template('validator.html', valid="sequence not found")
+    if ref == "other":
+        seq = request.form[select_type + '_other_ref']
+        seqID = validate.build_seq(seq)
+    return seqID
+
+
 
 # start the server with the 'run()' method
 if __name__ == '__main__':
