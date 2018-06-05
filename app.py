@@ -225,9 +225,13 @@ def validation():
             user_seq = request.form['user_seq']
             seqID = get_seqID(select_type, request)
             if user_seq == seqID:
-                return render_template('validator.html', valid="Valid identifier!")
+                return render_template('validator.html', valid=True, message="Valid identifier!")
             else:
-                return render_template('validator.html', valid="Invalid identifier: &emsp;" + user_seq + "</br>&emsp;&emsp;&emsp;What we computed: " + seqID)
+                return render_template(
+                    'validator.html',
+                    valid=False,
+                    message="Invalid identifier: &emsp;" + user_seq + "<br/>&emsp;&emsp;&emsp;What we computed: " + seqID
+                )
 
         #Validation for a location identifier
         elif select_type == "loc":
@@ -237,9 +241,13 @@ def validation():
                 start = request.form['loc_start_loc']
                 locID = validate.build_loc(seqID, int(start))
                 if locID == user_loc:
-                    return render_template('validator.html', valid="Valid identifier!")
+                    return render_template('validator.html', valid=True, message="Valid identifier!")
                 else:
-                    return render_template('validator.html', valid="Invalid identifier: " + user_loc +"</br>&emsp;&emsp;&emsp;What we computed: " + locID)
+                    return render_template(
+                        'validator.html',
+                        valid=False,
+                        message="Invalid identifier: " + user_loc + "<br/>&emsp;&emsp;&emsp;What we computed: " + locID
+                    )
 
             #Validation for a allele identifier
         elif select_type == "allele":
@@ -254,9 +262,13 @@ def validation():
                 alleleID = validate.build_allele(locID, state)
                 print("alleleID: " + alleleID)
                 if alleleID == user_allele:
-                    return render_template('validator.html', valid="Valid identifier!")
+                    return render_template('validator.html', valid=True, message="Valid identifier!")
                 else:
-                    return render_template('validator.html', valid="Invalid identifier: " + user_allele + "</br>&emsp;&emsp;&emsp;What we computed: " + alleleID)
+                    return render_template(
+                        'validator.html',
+                        valid=False,
+                        message="Invalid identifier: " + user_allele + "<br/>&emsp;&emsp;&emsp;What we computed: " + alleleID
+                    )
         #Invalid selection
         else:
             return render_template('validator.html')
@@ -270,10 +282,10 @@ def get_seqID(select_type, request):
     ref = request.form.get(select)
     if ref == "grch37":
         #fetch grch37 seqID
-        return render_template('validator.html', valid="sequence not found")
+        return 'sequence not found'
     if ref == "grch38":
         #fetch grch38 seq_id
-        return render_template('validator.html', valid="sequence not found")
+        return 'sequence not found'
     if ref == "other":
         seq = request.form[select_type + '_other_ref']
         seqID = validate.build_seq(seq)
