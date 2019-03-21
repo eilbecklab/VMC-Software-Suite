@@ -1,0 +1,38 @@
+{% extends 'skin.html' %}
+{% block middle_content %}
+  <h2>Add VMC identifiers to your VCF file</h2>
+  <blockquote>
+    <p>All identifiers are generated using the VMC digest algorithm (<i>see specification</i>) and will be added to the INFO field of each variant in the file. Variants will be right-normalized using the <a href="https://genome.sph.umich.edu/wiki/Vt#Normalization">VT algorithm</a>, as required by the VMC specification.
+The following descriptors will also be added to the meta-information section of the file.<br/>
+      <p>
+        <code>VMCGSID</code><small>   ##INFO=&lt;ID=VMCGSID,Number=1,Type=String,Description="VMC Sequence identifier"&gt;</small><br/>
+        <code>VMCGLID</code><small>   ##INFO=&lt;ID=VMCGLID,Number=1,Type=String,Description="VMC Location identifier"&gt;</small><br/>
+        <code>VMCGAID</code><small>   ##INFO=&lt;ID=VMCGAID,Number=1,Type=String,Description="VMC Allele identifier"&gt;</small><br/>
+      </p>
+  </blockquote>
+    {% include 'vcf-upload.html' %}
+         Please ensure the correct reference sequence is specified in the drop-down below before adding the identifiers.</p>
+  <form action="" method="post">
+  <select name="reference" style="width:120px;font-size:80%;">
+      <option selected="selected" value="hg19">GRCh37/hg19</option>
+      <option value="hg38">GRCh38/hg38</option>
+      <option value="hg18">NCBI36/hg18</option>
+  </select>
+  <!--Transform "button" (actually an image with a link)-->
+  <p class=" pointer text-muted">
+      <button onclick="showGIF();" type="submit"><img class="button" src="../static/images/convert.png"/></button> Add identifiers
+  </p>
+  </form>
+  <!--Display area for transformed VCF file-->
+  <table class="codehilitetable">
+    <tr>
+      <td class="code">
+        <div class="codehilite"><pre>{{ vmc_vcf }}</pre></div>
+      </td>
+    </tr>
+  </table>
+  <!--Download "button" (actually an image with a link)-->
+  <p class="pointer text-muted">
+    <a href="/vcf-download"><img class="button" src="../static/images/download.png"/></a> Download transformed VCF
+  </p>
+{% endblock %}

@@ -4,7 +4,6 @@ from collections import OrderedDict
 
 def assemble_json(ids):
     d = OrderedDict()
-    d["$schema"] = "http://json-schema.org/schema#"
     locations = OrderedDict()
     alleles = OrderedDict()
     identifiers = OrderedDict()
@@ -12,31 +11,37 @@ def assemble_json(ids):
         print(line)
         b = line.split("\t")
         #Extract elements for JSON
-        loc_id = b[0]
-        interval = b[1].split(":")
-        start = interval[0]
-        end = interval[1]
-        seq_id = b[2]
-        all_id = b[3]
-        state = b[4]
-        accession = b[5]
-        namespace = b[6].strip()
+        seq_id = b[0]
+        accession = b[1]
+        namespace = b[2]
+        if seq_id[:5] == 'Error':
+            loc_id = ''
+            allele_id = ''
+            identifiers[loc_id] = [{"namespace": "VMC", "accession": 'Error with Sequence Identifier'}]
+            identifiers[allele_id] = [{"namespace": "VMC", "accession": 'Error with Sequence Identifier'}]
+        else:
+            loc_id = b[4]
+            allele_id = b[6]
+            identifiers[loc_id] = [{"namespace": "VMC", "accession": loc_id.split(":")[1]}]
+            identifiers[allele_id] = [{"namespace": "VMC", "accession": allele_id.split(":")[1]}]
+        interval = b[3].split(":")
+        start = int(interval[0])
+        end = int(interval[1])
+        state = b[5]
         #Build dictionary to convert to JSON
         locations[loc_id] = {
             "id":loc_id,
-            "interval":{
-                "end":end,
-                "start":start},
-            "sequence_id":seq_id
+            "interval": {
+                "end": end,
+                "start": start},
+            "sequence_id": seq_id
         }
-        alleles[all_id] = {
-            "id":all_id,
-            "location_id":loc_id,
-            "state":state
+        alleles[allele_id] = {
+            "id": allele_id,
+            "location_id": loc_id,
+            "state": state
         }
-        identifiers[seq_id] = {"namespace":namespace,"accession":accession}
-        identifiers[loc_id] = {"namespace":"VMC","accession":loc_id.split(":")[1]}
-        identifiers[all_id] = {"namespace":"VMC","accession":all_id.split(":")[1]}
+        identifiers[seq_id] = [{"namespace":namespace,"accession":accession}]
     d["locations"] = locations
     d["alleles"] = alleles
     d["haplotypes"] = {"":""}

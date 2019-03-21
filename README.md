@@ -11,3 +11,5 @@ This web tool is designed to perform the following functions:
 ### Without a user-uploaded VCF file
     -Return a VMC bundle (represented in JSON) which contains identifiers for a user-entered HGVS expression.
     -Validate a user-entered VMC identifier to ensure proper implementation of the VMC specification.
+
+To create VMC Sequence identifiers for rsID's found in a VCF, dbSNP is queried and the most recent accession number associated with that entry is pulled. If this query doesn't return an accession, it is store as an error in the database to avoid future lookups. To request that our database be updated to re-query for rsID's that were recently added into dbSNP, please submit a ticket.
