@@ -41,5 +41,5 @@ Unidecode==1.0.22
 urllib3==1.22
 vmc==0.1.1
 wcwidth==0.1.7
-Werkzeug==0.14.1
+Werkzeug==0.15.3
 yoyo-migrations==5.0.5
