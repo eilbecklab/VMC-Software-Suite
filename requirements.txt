@@ -17,7 +17,7 @@ iniherit==0.3.9
 ipython==5.6.0
 ipython-genutils==0.2.0
 itsdangerous==0.24
-Jinja2==2.10
+Jinja2==2.11.3
 jsonschema==2.6.0
 Markdown==2.4
 MarkupSafe==1.0
